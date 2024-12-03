@@ -5,7 +5,7 @@ import io.github.gabrielhenriquehe.itajufacil.domain.user.UserRegisterDTO;
 import io.github.gabrielhenriquehe.itajufacil.exceptions.InfoAlreadyInUseException;
 import io.github.gabrielhenriquehe.itajufacil.exceptions.InvalidDataProvidedException;
 import io.github.gabrielhenriquehe.itajufacil.repositories.UserRepository;
-import io.github.gabrielhenriquehe.itajufacil.utils.AuthValidator;
+import io.github.gabrielhenriquehe.itajufacil.utils.AuthDataValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,11 +37,11 @@ public class AuthService {
 
 
     private void validateUserData(UserRegisterDTO data) {
-        if (!AuthValidator.isValidEmail(data.email())) throw new InvalidDataProvidedException("Email inválido.");
-        if (!AuthValidator.isValidName(data.name())) throw new InvalidDataProvidedException("Nome inválido.");
-        if (!AuthValidator.isValidUsername(data.username())) throw new InvalidDataProvidedException("Nome de usuário inválido.");
-        if (!AuthValidator.isValidPassword(data.password())) throw new InvalidDataProvidedException("Senha inválida.");
-        if (!AuthValidator.isValidPhoneNumber(data.phone())) throw new InvalidDataProvidedException("Número de telefone inválido.");
+        if (!AuthDataValidator.isValidEmail(data.email())) throw new InvalidDataProvidedException("Email inválido.");
+        if (!AuthDataValidator.isValidName(data.name())) throw new InvalidDataProvidedException("Nome inválido.");
+        if (!AuthDataValidator.isValidUsername(data.username())) throw new InvalidDataProvidedException("Nome de usuário inválido.");
+        if (!AuthDataValidator.isValidPassword(data.password())) throw new InvalidDataProvidedException("Senha inválida.");
+        if (!AuthDataValidator.isValidPhoneNumber(data.phone())) throw new InvalidDataProvidedException("Número de telefone inválido.");
     }
 }
 

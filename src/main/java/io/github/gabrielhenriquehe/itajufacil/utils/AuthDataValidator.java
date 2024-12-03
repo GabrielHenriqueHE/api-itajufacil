@@ -1,6 +1,6 @@
 package io.github.gabrielhenriquehe.itajufacil.utils;
 
-public class AuthValidator {
+public class AuthDataValidator {
 
     public static boolean isValidName(String name) {
         return name != null &&

@@ -17,8 +17,8 @@ public class GlobalRequestHandler {
 
     @ExceptionHandler(InvalidDataProvidedException.class)
     public ResponseEntity<ApiResponse<Void>> handleInvalidDataProvidedException(InvalidDataProvidedException e) {
-        ApiResponse<Void> response = new ApiResponse<>(HttpStatus.CONFLICT.value(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        ApiResponse<Void> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
 }
