@@ -17,7 +17,7 @@ spring.datasource.url=jdbc:postgresql://localhost:5432/api-itajufacil
 spring.datasource.username=postgres
 spring.datasource.password=1
 spring.jpa.show-sql=true
-spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 ```
 
