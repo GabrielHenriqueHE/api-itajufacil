@@ -1,6 +1,7 @@
 package io.github.gabrielhenriquehe.itajufacil.domain.user;
 
 import io.github.gabrielhenriquehe.itajufacil.domain.product.Product;
+import io.github.gabrielhenriquehe.itajufacil.domain.solution.Solution;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,6 +45,9 @@ public class User implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Product> products = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Solution> solutions = new HashSet<>();
 
     public User(String email, String name, String username, String password, String phone) {
         this.email = email;

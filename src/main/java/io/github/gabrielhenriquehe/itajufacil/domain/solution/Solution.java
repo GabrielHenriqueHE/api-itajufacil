@@ -1,5 +1,6 @@
 package io.github.gabrielhenriquehe.itajufacil.domain.solution;
 
+import io.github.gabrielhenriquehe.itajufacil.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TB_services")
+@Table(name = "TB_solutions")
 
 @Getter
 @Setter
@@ -40,11 +41,16 @@ public class Solution implements Serializable {
     @Column(nullable = false)
     private SolutionSpecification specification;
 
-    public Solution(String name, String description, BigDecimal price, SolutionCategory category, SolutionSpecification specification) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Solution(String name, String description, BigDecimal price, SolutionCategory category, SolutionSpecification specification, User user) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
         this.specification = specification;
+        this.user = user;
     }
 }
