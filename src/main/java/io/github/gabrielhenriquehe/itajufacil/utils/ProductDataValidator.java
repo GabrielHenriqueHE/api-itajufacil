@@ -19,7 +19,7 @@ public class ProductDataValidator {
     }
 
     public static boolean isValidPrice(BigDecimal price) {
-        return price != null && Double.parseDouble(price.toString()) > 0.00;
+        return price != null && price.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public static boolean isValidCategory(String category) {

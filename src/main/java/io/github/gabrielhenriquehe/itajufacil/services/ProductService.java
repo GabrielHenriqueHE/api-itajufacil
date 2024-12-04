@@ -1,10 +1,8 @@
 package io.github.gabrielhenriquehe.itajufacil.services;
 
-import io.github.gabrielhenriquehe.itajufacil.domain.product.Product;
-import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductCategory;
-import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductRegisterDTO;
-import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductSpecification;
+import io.github.gabrielhenriquehe.itajufacil.domain.product.*;
 import io.github.gabrielhenriquehe.itajufacil.dto.ProductResponseDTO;
+import io.github.gabrielhenriquehe.itajufacil.exceptions.ForbiddenOperationException;
 import io.github.gabrielhenriquehe.itajufacil.exceptions.InvalidDataProvidedException;
 import io.github.gabrielhenriquehe.itajufacil.exceptions.ResourceNotFoundException;
 import io.github.gabrielhenriquehe.itajufacil.repositories.ProductRepository;
@@ -34,6 +32,67 @@ public class ProductService {
         ProductCategory category = ProductCategory.valueOf(data.category().toUpperCase());
         ProductSpecification specification = ProductSpecification.valueOf(data.specification().toUpperCase());
         Product product = new Product(data.name(), data.description(), data.price(), category, specification, user);
+
+        return this.productRepository.save(product);
+    }
+
+    @Transactional
+    public void deleteProduct(UUID productId, UUID userId) {
+        Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Produto não localizado."));
+        var user = this.userService.findUserById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não localizado."));
+
+        if (!product.getUser().equals(user)) throw new ForbiddenOperationException("Operação não permitida: o usuário não é o dono deste produto.");
+
+        this.productRepository.delete(product);
+    }
+
+    @Transactional
+    public Product patchProduct(UUID productId, UUID userId, ProductPatchDTO data) {
+        Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Produto não localizado."));
+        var user = this.userService.findUserById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não localizado."));
+
+        if (!product.getUser().equals(user)) throw new ForbiddenOperationException("Operação não permitida: o usuário não é o dono deste produto.");
+
+        if (data.name() != null) {
+            if (!ProductDataValidator.isValidName(data.name())) {
+                throw new InvalidDataProvidedException("Nome inválido.");
+            } else {
+                product.setName(data.name());
+            }
+        }
+
+        if (data.description() != null) {
+            if (!ProductDataValidator.isValidDescription(data.description())) {
+                product.setDescription(data.description());
+                throw new InvalidDataProvidedException("Descrição inválida");
+            } else {
+                product.setDescription(data.description());
+            }
+        }
+
+        if (data.price() != null) {
+            if (!ProductDataValidator.isValidPrice(data.price())) {
+                throw new InvalidDataProvidedException("Preço inválido.");
+            } else {
+                product.setPrice(data.price());
+            }
+        }
+
+        if (data.category() != null) {
+            if (!ProductDataValidator.isValidCategory(data.category())) {
+                throw new InvalidDataProvidedException("Categoria inválida.");
+            } else {
+                product.setCategory(ProductCategory.valueOf(data.category()));
+            }
+        }
+
+        if (data.specification() != null) {
+            if (!ProductDataValidator.isValidSpecification(data.specification())) {
+                throw new InvalidDataProvidedException("Especificação inválida.");
+            } else {
+                product.setSpecification(ProductSpecification.valueOf(data.specification()));
+            }
+        }
 
         return this.productRepository.save(product);
     }
