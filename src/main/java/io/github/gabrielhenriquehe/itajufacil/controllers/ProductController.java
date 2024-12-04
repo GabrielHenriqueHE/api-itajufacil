@@ -1,10 +1,9 @@
 package io.github.gabrielhenriquehe.itajufacil.controllers;
 
-import io.github.gabrielhenriquehe.itajufacil.domain.product.Product;
 import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductPatchDTO;
 import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductRegisterDTO;
 import io.github.gabrielhenriquehe.itajufacil.dto.ApiResponse;
-import io.github.gabrielhenriquehe.itajufacil.dto.ProductResponseDTO;
+import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductResponseDTO;
 import io.github.gabrielhenriquehe.itajufacil.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

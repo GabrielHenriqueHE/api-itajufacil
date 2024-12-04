@@ -1,7 +1,4 @@
-package io.github.gabrielhenriquehe.itajufacil.dto;
-
-import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductCategory;
-import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductSpecification;
+package io.github.gabrielhenriquehe.itajufacil.domain.product;
 
 import java.math.BigDecimal;
 

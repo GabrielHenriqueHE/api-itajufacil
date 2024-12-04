@@ -1,7 +1,7 @@
 package io.github.gabrielhenriquehe.itajufacil.services;
 
 import io.github.gabrielhenriquehe.itajufacil.domain.product.*;
-import io.github.gabrielhenriquehe.itajufacil.dto.ProductResponseDTO;
+import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductResponseDTO;
 import io.github.gabrielhenriquehe.itajufacil.exceptions.ForbiddenOperationException;
 import io.github.gabrielhenriquehe.itajufacil.exceptions.InvalidDataProvidedException;
 import io.github.gabrielhenriquehe.itajufacil.exceptions.ResourceNotFoundException;
