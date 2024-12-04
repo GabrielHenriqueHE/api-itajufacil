@@ -1,5 +1,6 @@
 package io.github.gabrielhenriquehe.itajufacil.domain.product;
 
+import io.github.gabrielhenriquehe.itajufacil.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,12 +41,17 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private ProductSpecification specification;
 
-    public Product(String name, String description, BigDecimal price, ProductCategory category, ProductSpecification specification) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Product(String name, String description, BigDecimal price, ProductCategory category, ProductSpecification specification, User user) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
         this.specification = specification;
+        this.user = user;
     }
 
 }

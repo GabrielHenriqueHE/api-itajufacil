@@ -1,10 +1,13 @@
 package io.github.gabrielhenriquehe.itajufacil.domain.user;
 
+import io.github.gabrielhenriquehe.itajufacil.domain.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -38,6 +41,9 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Product> products = new HashSet<>();
 
     public User(String email, String name, String username, String password, String phone) {
         this.email = email;

@@ -3,6 +3,7 @@ package io.github.gabrielhenriquehe.itajufacil.controllers;
 import io.github.gabrielhenriquehe.itajufacil.domain.product.Product;
 import io.github.gabrielhenriquehe.itajufacil.domain.product.ProductRegisterDTO;
 import io.github.gabrielhenriquehe.itajufacil.dto.ApiResponse;
+import io.github.gabrielhenriquehe.itajufacil.dto.ProductResponseDTO;
 import io.github.gabrielhenriquehe.itajufacil.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
@@ -19,8 +21,11 @@ public class ProductController {
     private ProductService service;
 
     @PostMapping("/new")
-    public ResponseEntity<ApiResponse<Void>> registerProduct(@RequestBody ProductRegisterDTO data) {
-        this.service.registerProduct(data);
+    public ResponseEntity<ApiResponse<Void>> registerProduct(@RequestBody ProductRegisterDTO data, String id) {
+
+        UUID userId = UUID.fromString(id);
+
+        this.service.registerProduct(data, userId);
 
         ApiResponse<Void> response = new ApiResponse<>(HttpStatus.CREATED.value(), "Produto criado com sucesso.");
 
@@ -28,9 +33,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Product>>> getAll() {
-        List<Product> products = this.service.findAll();
-        ApiResponse<List<Product>> response = new ApiResponse<>(HttpStatus.OK.value(), null, products);
+    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> getAll() {
+        List<ProductResponseDTO> products = this.service.findAll();
+
+        ApiResponse<List<ProductResponseDTO>> response = new ApiResponse<>(HttpStatus.OK.value(), null, products);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
