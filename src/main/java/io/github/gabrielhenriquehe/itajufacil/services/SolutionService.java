@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,18 +98,36 @@ public class SolutionService {
         return this.solutionRepository.save(solution);
     }
 
-    public List<SolutionResponseDTO> findAll() {
-        List<Solution> rawSolutions = this.solutionRepository.findAll();
+    public List<SolutionResponseDTO> findSolutions(UUID userId, String category) {
 
-        return rawSolutions.stream().map(s -> new SolutionResponseDTO(
-                s.getName(),
-                s.getDescription(),
-                s.getPrice(),
-                s.getCategory(),
-                s.getSpecification(),
-                s.getUser().getUsername()
-        )).toList();
+        List<Solution> rawSolutions;
 
+        if (userId != null && category != null) {
+            var user = this.userService.findUserById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não localizado."));
+
+            rawSolutions = this.solutionRepository.findFilteredSolutions(userId, SolutionCategory.valueOf(category.toUpperCase()));
+        } else if (userId != null) {
+            var user = this.userService.findUserById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não localizado."));
+
+            rawSolutions = this.solutionRepository.findFilteredSolutions(userId, null);
+        } else if (category != null ){
+            rawSolutions = this.solutionRepository.findFilteredSolutions(null, SolutionCategory.valueOf(category.toUpperCase()));
+        } else {
+            rawSolutions = this.solutionRepository.findFilteredSolutions(null, null);
+        }
+
+        if (!rawSolutions.isEmpty()) {
+            return rawSolutions.stream().map(s -> new SolutionResponseDTO(
+                    s.getName(),
+                    s.getDescription(),
+                    s.getPrice(),
+                    s.getCategory(),
+                    s.getSpecification(),
+                    s.getUser().getUsername()
+            )).toList();
+        }
+
+        return new ArrayList<>();
     }
 
     private void validateSolutionData(SolutionRegisterDTO data) {

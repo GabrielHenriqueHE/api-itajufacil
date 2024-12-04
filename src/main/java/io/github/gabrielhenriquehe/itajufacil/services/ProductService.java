@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,18 +98,36 @@ public class ProductService {
         return this.productRepository.save(product);
     }
 
-    public List<ProductResponseDTO> findAll() {
-        List<Product> rawProducts = this.productRepository.findAll();
+    public List<ProductResponseDTO> findProducts(UUID userId, String category) {
 
-        return rawProducts.stream().map(p -> new ProductResponseDTO(
-                p.getName(),
-                p.getDescription(),
-                p.getPrice(),
-                p.getCategory(),
-                p.getSpecification(),
-                p.getUser().getUsername()
-        )).toList();
+        List<Product> rawProducts;
 
+        if (userId != null && category != null) {
+            var user = this.userService.findUserById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não localizado."));
+
+            rawProducts = this.productRepository.findFilteredProducts(userId, ProductCategory.valueOf(category.toUpperCase()));
+        } else if (userId != null) {
+            var user = this.userService.findUserById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não localizado."));
+
+            rawProducts = this.productRepository.findFilteredProducts(userId, null);
+        } else if (category != null) {
+            rawProducts = this.productRepository.findFilteredProducts(null, ProductCategory.valueOf(category.toUpperCase()));
+        } else {
+            rawProducts = this.productRepository.findFilteredProducts(null, null);
+        }
+
+        if (!rawProducts.isEmpty()) {
+            return rawProducts.stream().map(p -> new ProductResponseDTO(
+                    p.getName(),
+                    p.getDescription(),
+                    p.getPrice(),
+                    p.getCategory(),
+                    p.getSpecification(),
+                    p.getUser().getUsername()
+            )).toList();
+        }
+
+        return new ArrayList<>();
     }
 
     private void validateProductData(ProductRegisterDTO data) {

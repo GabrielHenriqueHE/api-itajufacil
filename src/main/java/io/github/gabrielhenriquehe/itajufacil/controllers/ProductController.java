@@ -49,11 +49,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> getAll() {
-        List<ProductResponseDTO> products = this.service.findAll();
+    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> getAll(
+            @RequestParam(name = "userId", required = false) UUID userId,
+            @RequestParam(name = "category", required = false) String category
+    ) {
+        List<ProductResponseDTO> products = this.service.findProducts(userId, category);
 
         ApiResponse<List<ProductResponseDTO>> response = new ApiResponse<>(HttpStatus.OK.value(), null, products);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
 }

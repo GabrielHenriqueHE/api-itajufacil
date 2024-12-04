@@ -49,10 +49,13 @@ public class SolutionController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<SolutionResponseDTO>>> findAll() {
-        var data = this.service.findAll();
+    public ResponseEntity<ApiResponse<List<SolutionResponseDTO>>> findSolutions(
+            @RequestParam(name = "userId", required = false) UUID userId,
+            @RequestParam(name = "category", required = false) String category
+    ) {
+        List<SolutionResponseDTO> solutions = this.service.findSolutions(userId, category);
 
-        ApiResponse<List<SolutionResponseDTO>> response = new ApiResponse<>(HttpStatus.OK.value(), null, data);
+        ApiResponse<List<SolutionResponseDTO>> response = new ApiResponse<>(HttpStatus.OK.value(), null, solutions);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
